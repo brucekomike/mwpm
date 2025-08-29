@@ -19,5 +19,5 @@ page_list=${page_list%|}
 echo "Processing pages: $page_list"
 RESULT=$(export-xml "$page_list")
 RESULT=$(jq -r '.query.export."*"' <<< "$RESULT")
-echo $RESULT > "export/${FILENAME%.*}.xml"
+echo $RESULT > "cache-xml/${FILENAME%.*}.xml"
 echo "Finished processing."

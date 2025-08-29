@@ -1,14 +1,27 @@
+#
+# target wiki settings
+#
 # get this from Special:BotPassword
-export MW_PASS=""
 export MW_USER=""
+export MW_PASS=""
 
-# the interwiki prefix name for the source wiki to import from
-export MW_PREF=""
-# or use the source wiki url
-export MW_SRC=""
 
 # bot info, to be embeded in the page comments
 export BOT_INFO="mwpm"
 
 # the url for the target wiki to import pages, end with /
 export MW_URL=""
+
+#
+# source wiki settings
+#
+# the interwiki prefix name for the source wiki to import from
+export MW_PREF=""
+# or use the source wiki url, for wikitext and xml transfer
+export SRC_URL=""
+
+
+# if your src wiki need login, also add these
+#private_src=true
+#export SRC_USER=""
+#export SRC_PASS=""

@@ -16,30 +16,33 @@ TOKEN=$(jq -r ".query.tokens[\"${1}token\"]" <<< "$RESULT")
 echo "$TOKEN"
 }
 
+# $0 <wiki-url> <username> <password>
 function mw-login(){
   API_URL="api.php"
   curl -fsSL -X POST \
   --data-urlencode action=login \
-  -d lgname="$MW_USER" \
-  -d lgpassword="$MW_PASS" \
+  -d lgname="$2" \
+  -d lgpassword="$3" \
   --data-urlencode lgtoken=$(get-token login) \
   -d format=json  \
   -c cookie.txt \
   -b cookie.txt \
-  "${MW_URL}${API_URL}"
+  "${$1}${API_URL}"
 }
 
-# $0 <page-names>
-# return the full json result
-# xml is in .query.export."*"
-function export-xml(){
-  API_URL="api.php?action=query&format=json"
-  curl -fsSL -X POST \
-  -d "titles=$1" \
-  -d "export" \
-  -c cookie.txt \
-  -b cookie.txt \
-  "${MW_URL}${API_URL}"
+# $0 <file> <command>
+# every line is in the $trimmed_line variable
+function batch-process(){
+while IFS= read -r line; do
+    trimmed_line=$(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    if [[ -z "$trimmed_line" ]]; then
+        continue
+    fi
+    if [[ "$trimmed_line" =~ ^# ]]; then
+        continue
+    fi
+    eval $2
+done < "$1"
 }
 
 # $0 <page-name>
@@ -71,17 +74,27 @@ function xml-import(){
   "${MW_URL}${API_URL}"
 }
 
-# $0 <file> <command>
-# every line is in the $trimmed_line variable
-function batch-process(){
-while IFS= read -r line; do
-    trimmed_line=$(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-    if [[ -z "$trimmed_line" ]]; then
-        continue
-    fi
-    if [[ "$trimmed_line" =~ ^# ]]; then
-        continue
-    fi
-    eval $2
-done < "$1"
+# $0 <page-names>
+# return the full json result
+# xml is in .query.export."*"
+function export-xml(){
+  API_URL="api.php?action=query&format=json"
+  curl -fsSL -X POST \
+  -d "titles=$1" \
+  -d "export" \
+  -c cookie.txt \
+  -b cookie.txt \
+  "${SRC_URL}${API_URL}"
+}
+
+# $0 <page-name>
+function export-page(){
+  page_name="$1"
+  API_URL="api.php?action=parse&page=${page_name}&prop=wikitext&format=json"
+  RESULT=$(curl -fsSL -X GET \
+  -c cookie.txt \
+  -b cookie.txt \
+  "${SRC_URL}${API_URL}")
+  RESULT=$(jq -r ".parse.wikitext.\"*\"" <<< "$RESULT")
+  echo "$RESULT"
 }

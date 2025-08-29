@@ -4,7 +4,11 @@
 source config.sh
 source lib.sh
 
-API_URL="api.php"
-echo "Logging into $MW_URL as $MW_USER"
-mw-login
+# login to $MW_URL
+mw-login "$MW_URL" "$MW_USER" "$MW_PASS"
+
+if [[ $private_src == "true" ]]; then
+  mw-login "$SRC_URL" "$SRC_USER" "$SRC_PASS"
+fi
+
 echo "Login finished."

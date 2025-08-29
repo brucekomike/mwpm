@@ -8,7 +8,7 @@ mainly used for importing page from exsiting wiki
 - curl
 - jq
 ### install (or update) a package
-- copy from example and modify the `config.sh`
+- `cp config.sh.example config.sh`
 - `./login.sh`
-- `./install-[type].sh` <package-definition-file>
+- `./install-[type].sh <package-definition-file>`
 
