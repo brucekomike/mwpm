@@ -17,6 +17,7 @@ FILE_NAME=$(basename "$FILE")
 export EXPORT_DIR="cache/$SITE_NAME/${FILE_NAME%.txt}"
 mkdir -p "$EXPORT_DIR"
 echo "Processing lines from '$FILE'"
-batch-process "$FILE" 'export-page $trimmed_line > $EXPORT_DIR/$trimmed_line.wikitext'
+batch-process "$FILE" 'export-plain $trimmed_line > $EXPORT_DIR/$trimmed_line.wikitext'
 
 echo "Finished processing."
+  

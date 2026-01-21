@@ -27,7 +27,7 @@ function mw-login(){
   -d format=json  \
   -c cookie.txt \
   -b cookie.txt \
-  "${$1}${API_URL}"
+  "${1}${API_URL}"
 }
 
 # $0 <file> <command>
@@ -62,13 +62,14 @@ function inter-import(){
 }
 
 function xml-import(){
-  page_name="$1"
+  xml_file="$1"
   API_URL="api.php?action=import&format=json"
-  curl -fsSL -X POST \
-  -d "summary=$BOT_INFO $MW_PREF" \
-  -d "assignknownusers=1" \
-  -d "templates=1" \
-  --data-urlencode "token=$(get-token csrf)" \
+  curl -fSL -X POST \
+  -F "xml=@${xml_file}" \
+  -F "summary=$BOT_INFO $MW_PREF" \
+  -F "assignknownusers=1" \
+  -F "interwikiprefix=imported" \
+  -F "token=$(get-token csrf)" \
   -c cookie.txt \
   -b cookie.txt \
   "${MW_URL}${API_URL}"
@@ -88,7 +89,7 @@ function export-xml(){
 }
 
 # $0 <page-name>
-function export-page(){
+function export-plain(){
   page_name="$1"
   API_URL="api.php?action=parse&page=${page_name}&prop=wikitext&format=json"
   RESULT=$(curl -fsSL -X GET \
