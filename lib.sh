@@ -61,10 +61,29 @@ function inter-import(){
   "${MW_URL}${API_URL}"
 }
 
+function plain-import(){
+  page_name="$1"
+  content_file="$2"
+  page_content="$(cat $content_file)"
+  echo "+++ writting page $page_name +++"
+  API_URL="api.php?action=edit&format=json"
+  curl -fsSL -X POST \
+  -d "summary=$BOT_INFO $MW_PREF" \
+  -d "title=$page_name" \
+  --data-urlencode "text=${page_content}" \
+  -d "bot=true" \
+  --data-urlencode "token=$(get-token csrf)" \
+  -c cookie.txt \
+  -b cookie.txt \
+  "${MW_URL}${API_URL}"
+  echo
+}
+
+
 function xml-import(){
   xml_file="$1"
   API_URL="api.php?action=import&format=json"
-  curl -fSL -X POST \
+  curl -fsSL -X POST \
   -F "xml=@${xml_file}" \
   -F "summary=$BOT_INFO $MW_PREF" \
   -F "assignknownusers=1" \
