@@ -30,6 +30,22 @@ function mw-login(){
   "${1}${API_URL}"
 }
 
+# $0 <wiki-url>
+function query-username(){
+  API_URL="api.php?action=query&meta=userinfo&format=json"
+  RESULT=$(curl -fsSL -X GET \
+  -c cookie.txt \
+  -b cookie.txt \
+  "${MW_URL}${API_URL}")
+  MW_USERNAME=$(jq -r ".query.userinfo.name" <<< "$RESULT")
+  if [[ "$MW_USERNAME" == "null" ]]; then
+    echo "Not logged in" >&2
+    exit 1
+  else
+    echo "$MW_USERNAME"
+  fi
+}
+
 # $0 <file> <command>
 # every line is in the $trimmed_line variable
 function batch-process(){
