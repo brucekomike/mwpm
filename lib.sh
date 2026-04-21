@@ -118,3 +118,19 @@ function export-plain(){
   RESULT=$(jq -r ".parse.wikitext.\"*\"" <<< "$RESULT")
   echo "$RESULT"
 }
+
+# $0 <page-name>
+function search-pkg(){
+  page_name="$1"
+  if [[ -f pkgs/"$page_name".txt ]]; then
+    echo pkgs/"$page_name".txt
+  else
+    if [[ -f pkgs/"$page_name" ]]; then
+      echo pkgs/"$page_name"
+    else
+      echo "No package found for $page_name" >&2
+      exit 1
+    fi
+  fi
+  
+}

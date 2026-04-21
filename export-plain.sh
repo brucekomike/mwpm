@@ -3,7 +3,7 @@
 source config.sh
 source lib.sh
 
-FILE="$1" # Replace with your actual file name
+FILE="$(search-pkg $1)" # Replace with your actual file name
 
 # Check if the file exists
 if [[ ! -f "$FILE" ]]; then
@@ -17,8 +17,9 @@ FILE_NAME=$(basename "$FILE")
 export EXPORT_DIR="cache/$SITE_NAME/${FILE_NAME%.txt}"
 mkdir -p "$EXPORT_DIR"
 echo "Processing lines from '$FILE'"
-batch-process "$FILE" 'mkdir -p $EXPORT_DIR/$(dirname $trimmed_line)'
-batch-process "$FILE" 'export-plain $trimmed_line > $EXPORT_DIR/$trimmed_line.wikitext'
+batch-process "$FILE" 'mkdir -p "$EXPORT_DIR/$(dirname "$trimmed_line")"'
+batch-process "$FILE" 'export-plain "$trimmed_line" > $EXPORT_DIR/"$trimmed_line".wikitext \
+&& echo "Exporting $trimmed_line" '
 
 echo "Finished processing."
   

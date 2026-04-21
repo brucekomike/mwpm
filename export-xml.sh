@@ -4,7 +4,7 @@ source config.sh
 source lib.sh
 
 # check file
-FILE="$1"
+FILE="$(search-pkg $1)"
 FILENAME=$(basename "$FILE")
 if [[ ! -f "$FILE" ]]; then
     echo "Error: File '$FILE' not found."

@@ -3,7 +3,7 @@
 source config.sh
 source lib.sh
 
-FILE="$1" # Replace with your actual file name
+FILE="$(search-pkg $1)" # Replace with your actual file name
 
 # Check if the file exists
 if [[ ! -f "$FILE" ]]; then
