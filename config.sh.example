@@ -25,3 +25,14 @@ export SRC_URL=""
 #private_src=true
 #export SRC_USER=""
 #export SRC_PASS=""
+
+#
+# pkgs repo settings
+#
+# Space-separated list of git URLs for pkgs repos.
+# Each repo clones into pkgs/<repo-name>/
+#
+#export PKGS_URL="
+#  https://example.com/pkgs-foo.git
+#  https://example.com/pkgs-bar.git
+#"
